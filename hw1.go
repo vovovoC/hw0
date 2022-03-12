@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"sort"
 	"strings"
+	"unicode"
 )
 
 func main() {
@@ -55,26 +56,19 @@ func main() {
 // For example, ParsePhone("123-456-7890") => "(123) 456-7890"
 //              ParsePhone("1 2 3 4 5 6 7 8 9 0") => "(123) 456-7890"
 func ParsePhone(phone string) string {
-	var res string = "("
-	var index int = 1
-
-	for i := 0; i < len(phone); i++ {
-		if index == 4 {
-			res = res + ")"
-			index++
-		} else if index == 5 {
-			res = res + " "
-			index++
-		} else if index == 9 {
-			res = res + "-"
-			index++
-		}
-		if phone[i] >= '0' && phone[i] <= '9' {
-			res = res + string(phone[i])
+	digits := make([]byte, 10)
+	index := 0
+	for _, ch := range phone {
+		if unicode.IsDigit(ch) {
+			digits[index] = byte(ch)
 			index++
 		}
 	}
-	return res
+
+	fst := string(digits[:3])
+	mid := string(digits[3:6])
+	end := string(digits[6:10])
+	return fmt.Sprintf("(%v) %v-%v", fst, mid, end)
 }
 
 // Anagram tests whether the two strings are anagrams of each other.
@@ -101,22 +95,23 @@ func Anagram(s1, s2 string) bool {
 // FindEvens filters out all odd numbers from input slice.
 // Result should retain the same ordering as the input.
 func FindEvens(e []int) []int {
-	for i := 0; i < len(e); i++ {
-		if e[i]%2 != 0 {
-			e = append(e[:i], e[i+1:]...)
+	var evens []int
+	for _, i := range e {
+		if i%2 == 0 {
+			evens = append(evens, i)
 		}
 	}
-	return e
+	return evens
 }
 
 // SliceProduct returns the product of all elements in the slice.
 // For example, SliceProduct([]int{1, 2, 3}) => 6
 func SliceProduct(e []int) int {
-	var res int
-	for i := 0; i < len(e); i++ {
-		res += e[i]
+	p := 1
+	for _, i := range e {
+		p *= i
 	}
-	return res
+	return p
 }
 
 // Unique finds all distinct elements in the input array.

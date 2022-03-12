@@ -19,32 +19,20 @@ func main() {
 	}
 	fmt.Printf("Hello, %s/%s/%s!", world.English, world.Spanish, world.French)
 
-	var price1 Price = 45576
-	fmt.Println("\nTest String()", price1.String())
+	RegisterItem(Prices, "banana", 345)
+	fmt.Printf("Prices: %v\n", Prices)
+	// Re-register item
+	RegisterItem(Prices, "banana", 345)
+	fmt.Printf("Prices: %v\n", Prices)
 
-	var price Price = 219
-	fmt.Println("\nTest RegisterItem(): ")
-	RegisterItem(Prices, "eggs", price)
+	c := new(Cart)
+	c.AddItem("eggs")
+	c.AddItem("banana")
+	fmt.Printf("c.hasMilk() = %v\n", c.hasMilk())
+	fmt.Printf("c.HasItem(%v) = %v\n", "bread", c.HasItem("bread"))
 
-	var c Cart
-	c.Items = []string{"milk", "coffee"}
-
-	fmt.Println("\nTest hasMilk() in cart items {'milk', 'coffee'}")
-	fmt.Println("Has milk: ", c.hasMilk())
-
-	fmt.Println("\nTest hasItem() in cart items {'milk', 'coffee'}")
-	fmt.Println("Has coffee: ", c.HasItem("coffee"))
-	fmt.Println("Has bread: ", c.HasItem("bread"))
-
-	fmt.Println("\nTest AddTem()\nbread add to card")
-	c.AddItem("bread")
-	fmt.Println("\nWater add to card: ")
-	c.AddItem("water")
-	fmt.Println(Prices)
-
-	fmt.Println("\nTest Checkout()")
+	c.AddItem("milk")
 	c.Checkout()
-
 }
 
 // Price is the cost of something in US cents.
